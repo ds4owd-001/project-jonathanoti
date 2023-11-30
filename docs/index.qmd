@@ -1,0 +1,27 @@
+---
+title: "My Project"
+format: html
+editor: visual
+---
+
+## Project description
+
+This project is intended to analyse the wash coverage in schools in Sub-sahara Africa based on the following questions:
+
+-   What is the percentage coverage of hygiene services in schools per country?
+
+-   What is the percentage coverage of sanitation services in schools per country?
+
+-   What is the percentage coverage of water supply in per country schools?
+
+-   What is the relationship between the service delivery and the residency type: i.e. Does the location of the school (e.g. urban/rural) has any influence on the level of access to sanitation delivery?
+
+-   What are the top 10 countries with basic access to sanitation, hygiene and water supply services in schools?
+
+-   What are the top 10 countries with no access to sanitation, hygiene and water supply services in schools?
+
+## Import data
+
+```{r}
+
+```
