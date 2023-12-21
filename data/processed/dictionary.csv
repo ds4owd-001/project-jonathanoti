@@ -1,0 +1,12 @@
+variable_name,description
+ISO3,unique identifier of the countries
+SDGregion,the regional blocks for each countries under SDG categories
+Country,full name of the countries
+Year,The year of records
+Total_Population,The total number of school age children(also refered as National population)
+percent_coverage,The percentage of the population with access to the various services
+Residence_school_level,The type of residence where the schools are located and the school levels
+Service_level,The level of wash services available to the schools based on theJMP wash ladder
+Service_types,The wash services available in the schools
+Population_category,The categories under which the children are grouped
+population_share,The proportion of students in either the residence type or the school level (sum of residence type share or school level proportions equals the total population or national population)

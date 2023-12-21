@@ -4,9 +4,13 @@ format: html
 editor: visual
 ---
 
-## Project description
+# Project description
 
 This project is intended to analyse the wash coverage in schools in Sub-sahara Africa based on the following questions:
+
+-   What are the top 10 countries with basic access to sanitation, hygiene and water supply services in schools?
+
+-   What are the top 10 countries with no access to sanitation, hygiene and water supply services in schools?
 
 -   What is the percentage coverage of hygiene services in schools per country?
 
@@ -16,11 +20,260 @@ This project is intended to analyse the wash coverage in schools in Sub-sahara A
 
 -   What is the relationship between the service delivery and the residency type: i.e. Does the location of the school (e.g. urban/rural) has any influence on the level of access to sanitation delivery?
 
--   What are the top 10 countries with basic access to sanitation, hygiene and water supply services in schools?
+-   At what school level is wash services lacking or improving? Compare between countries
 
--   What are the top 10 countries with no access to sanitation, hygiene and water supply services in schools?
+    *Tips: Sort the percentage_coverage in descending order for top 10 and ascending order for bottom ten. It will also answer the top country. The subsequent objectives will be answered from this with graphs for the top and bottom 5 coountries.*
 
-## Import data
+# Data aquisition
+
+## Install and import package to extract data from jmpwash data
+
+```{r}
+#| eval: False
+
+#install.packages("devtools")
+
+#devtools::install_github("WASHNote/jmpwashdata")
+
+library(jmpwashdata)
+```
+
+```{r}
+#| eval: False
+
+#extract data of interest from the package
+
+jmp_schools_wld_hygiene <-  jmpwashdata::jmp_schools_wld_hygiene
+jmp_schools_wld_sanitation <-  jmpwashdata::jmp_schools_wld_sanitation
+jmp_schools_wld_water <-  jmpwashdata::jmp_schools_wld_water
+```
+
+## Save data
+
+```{r}
+#| eval: False
+
+# Save data as csv into the data/raw folder
+
+write_csv(jmp_schools_wld_hygiene, here::here("data/raw/jmp_schools_hygiene.csv"))
+write_csv(jmp_schools_wld_water, here::here("data/raw/jmp_schools_water.csv"))
+write_csv(jmp_schools_wld_sanitation, here::here("data/raw/jmp_schools_sanitation.csv"))
+```
+
+# Data cleaning
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+
+# Import data
+
+data_hygi <- read_csv(here::here("data/raw/jmp_schools_hygiene.csv"), col_select = 1:25)
+data_sanit <- read_csv(here::here("data/raw/jmp_schools_sanitation.csv"), col_select = 1:25)
+data_water <- read_csv(here::here("data/raw/jmp_schools_water.csv"), col_select = 1:25)
+jmp2022 <- read_csv(here::here("data/raw/JMP_2022_Schools_WASH.csv"))
+
+# the jmp2022 data is a full set of the data downloaded from the JMP website. It has additioinal information which is needed for the analysis. The interested dsection will be extracted.
+```
+
+```{r}
+
+# combine the service type datasets into one
+
+data_merge_1 <- cbind.data.frame(data_hygi, data_sanit[,-c(1:7)])
+data_merge_full <- cbind.data.frame(data_merge_1, data_water[,-c(1:7)])
+
+
+
+```
+
+## Renaming
+
+```{r}
+
+#Rename the headings fo some columns
+
+processed_v1 <- data_merge_full |> 
+  rename(country = "name",
+         total_population = "schoolagepop_nat",
+         urban_popu_percent = "prop_urb",
+         pre_school_popu_percent = "prop_pre",
+         prim_school_popu_percent = "prop_pri",
+         secon_school_popu_percent = "prop_sec") |> 
+  mutate(rural_popu_percent = 100 - urban_popu_percent) |> 
+  relocate(rural_popu_percent, .after = 4)
+
+
+#remove the section/rows that are not of interest from the country column
+processed_v1 <- processed_v1 |> 
+  filter(country != "WORLD")
+```
+
+## Time to merge with the data from jmp2022
+
+```{r}
+
+#Now select the data from JMP2022 and merge
+
+SDGregion <- jmp2022 |> 
+  select(`SDG region`) 
+iso3 <-  jmp2022 |> 
+  select(`iso3 code`)
+country <- jmp2022 |> 
+  select(`COUNTRY, AREA OR TERRITORY`)
+  
+sub_regions <- cbind.data.frame(SDGregion,iso3,country)
+sub_regions <-  drop_na(sub_regions)
+
+#convert to unique values and merge
+uniq_sub_regions <- unique(sub_regions)
+
+
+#join the sub_regions with the larger data (processed_v1) using left_join 
+combined_final <- left_join(processed_v1, uniq_sub_regions, by = "country") |> 
+  relocate(c(iso3, SDGregion))
+
+
+
+#save unique values as csv
+#write_csv(uniq_sub_regions, here::here("data/processed/sub_regions.csv"))
+
+#write_csv(processed_v2, here::here("data/raw/combined_final.csv"))
+
+```
+
+## Pivoting
+
+```{r}
+
+#it turns out there are negative values of -999 in the data which does not fit our purpose so we replace it with NAs
+
+processed_v2 <- combined_final |> 
+  mutate_all(~ ifelse(. == -999, NA, .))
+
+# we check to see if the values have been removed.
+which(processed_v2 == -999, arr.ind = TRUE)
+
+
+#-----------------------------pivot
+#combine the coverage of service levels under one variable and their corresponding values
+processed_v2_longer <- processed_v2 |> 
+  pivot_longer(cols = c(11:64),
+               values_to = "percent_coverage",
+              names_to = "service_levels")
+
+
+# creating new columns for the service types, residencial types and service levels
+processed_v2_longer <- 
+processed_v2_longer |> 
+  mutate(residence_school_level = factor(case_when(
+    str_detect(service_levels, "pre") ~ "Pre-primary",
+    str_detect(service_levels, "pri") ~ "Primary",
+    str_detect(service_levels, "sec") ~ "Secondary",
+    str_detect(service_levels, "urb") ~ "Urban residence",
+    str_detect(service_levels, "rur") ~ "Rural residence",
+    str_detect(service_levels, "nat") ~ "National level")), 
+        service_level = factor(case_when(
+    str_detect(service_levels, "bas") ~ "Basic service",
+    str_detect(service_levels, "lim") ~ "Limited service",
+    str_detect(service_levels, "none") ~ "No service")),
+         service_types = as.factor(case_when(
+    str_detect(service_levels, "hyg") ~ "Hygiene",
+    str_detect(service_levels, "wat") ~ "Water supply",
+    str_detect(service_levels, "san") ~ "Sanitation",
+    TRUE ~ "Other")))
+  
+
+# combine population proportions under one variable
+processed_v2_longer_v2 <- 
+processed_v2_longer |> 
+  select(-service_levels) |>  #removes the old service_levels column
+  pivot_longer(cols = c(6:10),
+               names_to = "population_category",
+               values_to = "population_share") 
+
+
+
+
+```
+
+## Check for NAs and fix it
+
+```{r}
+#count the number of observations
+processed_v2_longer_v2
+
+#check number of observations with no missing data
+sum(is.na.data.frame(processed_v2_longer_v2))
+
+#there are 729,310 rows with missing data
+
+#---------Remove the missing data from the column of interest
+processed_v2_longer_v3 <- processed_v2_longer_v2 |> 
+  filter(!is.na(percent_coverage))
+
+
+#checking for other NAs to confirm
+which(is.na(processed_v2_longer_v3), arr.ind = TRUE)
+
+processed_v2_longer_v3[76506:79005,1:3]
+#some NAs revealed in the iso3 column. it seems to be from Côte d’Ivoire. 
+
+
+#Let's fill it
+processed_v2_longer_v4 <- processed_v2_longer_v3 |> 
+  mutate(
+    iso3 = case_when(
+      is.na(iso3) & country == "Côte d’Ivoire" ~ "CIV", TRUE ~ iso3),
+    SDGregion = case_when(
+      is.na(SDGregion) & country == "Côte d’Ivoire" ~ "Sub-Saharan Africa", TRUE ~ SDGregion))
+
+
+#lets check again for the nas
+which(is.na(processed_v2_longer_v4), arr.ind = TRUE)
+
+#lets confirm
+processed_v2_longer_v4[76506:77005,1:3]
+
+#NOw everything is fine. There are no Nas
+```
+
+# Subset the final dataset for the analysis (data for sub-Sahara Africa)
+
+```{r}
+
+Final_processed_data <- processed_v2_longer_v4 |>
+  filter(SDGregion == "Sub-Saharan Africa")
+
+#save data in the processed folder
+write_csv(Final_processed_data, here::here("data/processed/final_capstone_data.csv"))
+```
+
+```{r}
+
+#Sample plot to test the data
+
+Final_processed_data |>
+  filter(residence_school_level %in% c("Urban residence", "Rural residence"),
+         #service_types == "Sanitation",
+         country == c("Ghana" ),
+         year == 2021) |> 
+  ggplot(mapping=aes(x = factor(residence_school_level),
+                     y = percent_coverage,
+                     fill = service_level)) +
+  geom_col(position = position_dodge())+
+  facet_wrap(~service_types)+
+  theme_classic()
+  #theme(text = element_text(size = 8), 
+        #axis.text.x = element_text(angle= 90, vjust=0.5, hjust=0.5, size = 9))
+
+```
+
+# Capstone Project
+
+## Task 1:
 
 ```{r}
 
