@@ -27,9 +27,7 @@ This project is intended to analyse the wash coverage in schools in Sub-Sahara A
 
 -   At what school level is wash services lacking or improving? Compare between countries
 
-    *Tips: Sort the percentage_coverage in descending order for top 10 and ascending order for bottom ten. It will also answer the top country. The subsequent objectives will be answered from this with graphs for the top and bottom 5 countries.*
-
-# Capstone Project
+# Analysis and Discussion
 
 ```{r}
 
@@ -64,9 +62,9 @@ hyg_col <- c("No service" = "#FEBC11","Limited service" = "#fff176", "Basic serv
 
 ### Sanitation Coverage
 
-This section looks at countries in Sub-Saharan Africa with high sanitation coverage in schools. The period used as the year 2021. The threshold was based on countries with at least 70% covearge for basic services.
+This section looks at countries in Sub-Saharan Africa with high sanitation coverage in schools. The period used as the year 2021. The threshold was based on countries with at least 70% coverage for basic services.
 
-In @tbl-sanitation-coverage-2021 , we could see that only 6 countries has sanitation coverage over 70%. Among these countries, Mauritius and Seychelles both have 100% coverage followed by Cape Verde with about 93%. Uganda and Sao Tome and Principe have almost same covergae approximately 75%.
+In @tbl-sanitation-coverage-2021 , we could see that only 6 countries has sanitation coverage over 70%. Among these countries, Mauritius and Seychelles both have 100% coverage followed by Cape Verde with about 93%. Uganda and Sao Tome and Principe have almost same coverage approximately 75%.
 
 ```{r }
 #| label: tbl-sanitation-coverage-2021 
@@ -107,9 +105,9 @@ Sanitation_coverage_70 |>
 
 ### Hygiene Coverage
 
-Under this service delivery, 5 countries have over 70% coverage led by Seychelles with 100%. Djibouti is second with 94% followed by Mauritius with 93%. Cape Verde is 4th with 86% and Guinnea Bissau is 5th with 76%.
+Under this service delivery, 5 countries have over 70% coverage led by Seychelles with 100%. Djibouti is second with 94% followed by Mauritius with 93%. Cabo Verde is 4th with 86% and Guinea Bissau is 5th with 76%.
 
-It could be seen that some countries are doing well in both the provision of sanitation and hygiene services whiles other countries are doing well in only one at a time. Cape Verde, Seychelles and Mauritius appeared in the top 5 for both hygiene and sanitation services.
+It could be seen that some countries are doing well in both the provision of sanitation and hygiene services whiles other countries are doing well in only one at a time. Cabo Verde, Seychelles and Mauritius appeared in the top 5 for both hygiene and sanitation services.
 
 The results can be seen in @tbl-hygiene-coverage-2021.
 
@@ -190,7 +188,7 @@ This section looks at countries in Sub-Saharan Africa with little or no WASH cov
 
 ### Sanitation Coverage
 
-In @tbl-sanitation-low-2021, we could see that 6 countries has more than 40% of the student population with no access to sanitation services. Among these countries, Niger is on top with 63%, follwed by Mauritania with 60% and Guinea-Bissau which is the least on the list with 40% of student population with no access to sanitation services.
+In @tbl-sanitation-low-2021, we could see that 6 countries has more than 40% of the student population with no access to sanitation services. Among these countries, Niger is on top with 63%, followed by Mauritania with 60% and Guinea-Bissau which is the least on the list with 40% of student population with no access to sanitation services.
 
 ```{r }
 #| label: tbl-sanitation-low-2021 
@@ -348,7 +346,7 @@ capstone_data_lvl |>
 
 ### Hygiene status
 
-Results for the two years remains the same for all the countries (@fig-hygiene-coverage-2021). It is also worthy to note that Seychelles was already at 100% access to basic services in 2019 and did not need any improvement. It is also important to note that Cabo Verde, Djibouti and Mauritius had insufficient data in 2019 and same as in 2021. They neither made progress in the coverage nor made improvement in the data availability. Though their current coverage for basic service is commendable, more effort is required to ensure data is available to make informed decisisons that will promote hygiene access in schools and ensure conducive schooling environment for all.
+Results for the two years remains the same for all the countries (@fig-hygiene-coverage-2021). It is also worthy to note that Seychelles was already at 100% access to basic services in 2019 and did not need any improvement. It is also important to note that Cabo Verde, Djibouti and Mauritius had insufficient data in 2019 and same as in 2021. They neither made progress in the coverage nor made improvement in the data availability. Though their current coverage for basic service is commendable, more effort is required to ensure data is available to make informed decisions that will promote hygiene access in schools and ensure conducive schooling environment for all.
 
 ```{r}
 #| fig-width: 10
@@ -425,7 +423,7 @@ This exercise was based on some selected countries that has data at the local le
 
 ### Sanitation
 
-Six countries in total were selected for this analysis. Among all the six countries, the coverage for basic sanitation service is higher for schools in urban areas than schools in rural areas with the exception of Mali. In @fig-sanitation-local-2021, it can be observed that Mali has high percentage coverage in rural areas than in urban areas. Likewise, the proportion of student population with limited access is higher in the rural areas than in urban areas except for Malawi where percentage coverage for limited acess is higher in urban areas than rural areas.
+Six countries in total were selected for this analysis. Among all the six countries, the coverage for basic sanitation service is higher for schools in urban areas than schools in rural areas with the exception of Mali. In @fig-sanitation-local-2021, it can be observed that Mali has high percentage coverage in rural areas than in urban areas. Likewise, the proportion of student population with limited access is higher in the rural areas than in urban areas except for Malawi where percentage coverage for limited access is higher in urban areas than rural areas.
 
 ```{r}
 #| fig-width: 10
@@ -497,12 +495,12 @@ capstone_data_lvl |>
 
 Access to basic services is higher in schools that are located in urban areas than schools in the rural areas for all the six countries analysed. Likewise, it could be seen that schools in rural areas have high records of no services as well as limited service. However, there is an exception for Nigeria and Tanzania, where the percentage of students with limited access in the urban area is higher than in the rural areas (@fig-water-local-2021).
 
-The results confirms the assertin that rural communities are always left behind in the provision of social amenities of which WASH services is essential. Lack of access to WASH services for students in the rural communities put the students at risk of contracting and spreading wash-related diseases which will affect their health and education. Thus, it is important to invest and pay attention to the rural communities to ensure that they have access to basic WASH services as their human rights.
+The results confirms the assertion that rural communities are always left behind in the provision of social amenities of which WASH services is essential. Lack of access to WASH services for students in the rural communities put the students at risk of contracting and spreading wash-related diseases which will affect their health and education. Thus, it is important to invest and pay attention to the rural communities to ensure that they have access to basic WASH services as their human rights.
 
 ```{r}
 #| fig-width: 10
 #| fig-asp: 0.618
-#| fig-cap: Comparison of sanitation services delivery between rural and urban areas
+#| fig-cap: Comparison of water supply services delivery between rural and urban areas
 #| label: fig-water-local-2021
 
 
@@ -529,3 +527,7 @@ capstone_data_lvl |>
 ```
 
 ## Task 5: Status WASH service delivery at the school level
+
+# Conclusion
+
+# References
