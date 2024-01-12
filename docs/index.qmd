@@ -1,16 +1,21 @@
 ---
-title: "My Project"
-format: html
+title: "STATUS OF WASH SERVICE DELIVERY IN SCHOOLS IN SUB-SAHARAN ASFRICA"
+author: Jonathan Opoku Oti
+format: 
+  html:
+    toc: true
+    number-sections: true
+    theme: materia
 editor: visual
 ---
 
 # Project description
 
-This project is intended to analyse the wash coverage in schools in Sub-sahara Africa based on the following questions:
+This project is intended to analyse the wash coverage in schools in Sub-Sahara Africa based on the following questions:
 
--   What are the top 10 countries with basic access to sanitation, hygiene and water supply services in schools?
+-   What are the top countries with basic access to sanitation, hygiene and water supply services in schools?
 
--   What are the top 10 countries with no access to sanitation, hygiene and water supply services in schools?
+-   What are the top countries with low access to basic sanitation, hygiene and water supply services in schools?
 
 -   What is the percentage coverage of hygiene services in schools per country?
 
@@ -22,14 +27,14 @@ This project is intended to analyse the wash coverage in schools in Sub-sahara A
 
 -   At what school level is wash services lacking or improving? Compare between countries
 
-    *Tips: Sort the percentage_coverage in descending order for top 10 and ascending order for bottom ten. It will also answer the top country. The subsequent objectives will be answered from this with graphs for the top and bottom 5 coountries.*
+    *Tips: Sort the percentage_coverage in descending order for top 10 and ascending order for bottom ten. It will also answer the top country. The subsequent objectives will be answered from this with graphs for the top and bottom 5 countries.*
 
 # Data aquisition
 
 ## Install and import package to extract data from jmpwash data
 
-```{r}
-#| eval: False
+```{r eval=FALSE, include=FALSE}
+#| eval: false
 
 #install.packages("devtools")
 
@@ -38,8 +43,8 @@ This project is intended to analyse the wash coverage in schools in Sub-sahara A
 library(jmpwashdata)
 ```
 
-```{r}
-#| eval: False
+```{r eval=FALSE, include=FALSE}
+#| eval: false
 
 #extract data of interest from the package
 
@@ -50,8 +55,8 @@ jmp_schools_wld_water <-  jmpwashdata::jmp_schools_wld_water
 
 ## Save data
 
-```{r}
-#| eval: False
+```{r eval=FALSE, include=FALSE}
+#| eval: false
 
 # Save data as csv into the data/raw folder
 
@@ -62,11 +67,12 @@ write_csv(jmp_schools_wld_sanitation, here::here("data/raw/jmp_schools_sanitatio
 
 # Data cleaning
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 library(tidyverse)
 ```
 
-```{r}
+```{r eval=FALSE, include=FALSE}
+#| eval: false
 
 # Import data
 
@@ -78,7 +84,8 @@ jmp2022 <- read_csv(here::here("data/raw/JMP_2022_Schools_WASH.csv"))
 # the jmp2022 data is a full set of the data downloaded from the JMP website. It has additioinal information which is needed for the analysis. The interested dsection will be extracted.
 ```
 
-```{r}
+```{r eval=FALSE, include=FALSE}
+#| eval: false
 
 # combine the service type datasets into one
 
@@ -91,7 +98,8 @@ data_merge_full <- cbind.data.frame(data_merge_1, data_water[,-c(1:7)])
 
 ## Renaming
 
-```{r}
+```{r eval=FALSE, include=FALSE}
+#| eval: false
 
 #Rename the headings fo some columns
 
@@ -113,7 +121,9 @@ processed_v1 <- processed_v1 |>
 
 ## Time to merge with the data from jmp2022
 
-```{r}
+```{r eval=FALSE, include=FALSE}
+
+#| eval: false
 
 #Now select the data from JMP2022 and merge
 
@@ -146,7 +156,8 @@ combined_final <- left_join(processed_v1, uniq_sub_regions, by = "country") |>
 
 ## Pivoting
 
-```{r}
+```{r eval=FALSE, include=FALSE}
+#| eval: false
 
 #it turns out there are negative values of -999 in the data which does not fit our purpose so we replace it with NAs
 
@@ -201,11 +212,13 @@ processed_v2_longer |>
 
 ## Check for NAs and fix it
 
-```{r}
+```{r eval=FALSE, include=FALSE}
+#| eval: false
+
 #count the number of observations
 processed_v2_longer_v2
 
-#check number of observations with no missing data
+#check number of observations with missing data
 sum(is.na.data.frame(processed_v2_longer_v2))
 
 #there are 729,310 rows with missing data
@@ -237,12 +250,14 @@ which(is.na(processed_v2_longer_v4), arr.ind = TRUE)
 #lets confirm
 processed_v2_longer_v4[76506:77005,1:3]
 
-#NOw everything is fine. There are no Nas
+#Now everything is fine. There are no Nas
 ```
 
-# Subset the final dataset for the analysis (data for sub-Sahara Africa)
+## Subset the final dataset for the analysis (data for sub-Sahara Africa)
 
-```{r}
+```{r eval=FALSE, include=FALSE}
+
+#| eval: false
 
 Final_processed_data <- processed_v2_longer_v4 |>
   filter(SDGregion == "Sub-Saharan Africa")
@@ -251,30 +266,503 @@ Final_processed_data <- processed_v2_longer_v4 |>
 write_csv(Final_processed_data, here::here("data/processed/final_capstone_data.csv"))
 ```
 
-```{r}
-
-#Sample plot to test the data
-
-Final_processed_data |>
-  filter(residence_school_level %in% c("Urban residence", "Rural residence"),
-         #service_types == "Sanitation",
-         country == c("Ghana" ),
-         year == 2021) |> 
-  ggplot(mapping=aes(x = factor(residence_school_level),
-                     y = percent_coverage,
-                     fill = service_level)) +
-  geom_col(position = position_dodge())+
-  facet_wrap(~service_types)+
-  theme_classic()
-  #theme(text = element_text(size = 8), 
-        #axis.text.x = element_text(angle= 90, vjust=0.5, hjust=0.5, size = 9))
-
-```
-
 # Capstone Project
 
-## Task 1:
-
 ```{r}
 
+library(gt)
+library(tidyverse)
 ```
+
+```{r }
+
+capstone_data <- read_csv(here::here("data/processed/final_capstone_data.csv"))
+
+```
+
+```{r }
+
+#define levels and colours
+levels_service_lvl <- c("No service", "Limited service", "Basic service")
+
+capstone_data_lvl <- capstone_data |> 
+  mutate(service_level = factor(service_level, levels = levels_service_lvl))
+
+
+# colours
+water_col <- c("No service" = "#FEBC11","Limited service" = "#fff176", "Basic service"= "#00b8ec")
+sani_col <- c("No service" = "#FEBC11","Limited service" = "#fff176", "Basic service"= "#51B453")
+hyg_col <- c("No service" = "#FEBC11","Limited service" = "#fff176", "Basic service"= "#ab47bc")
+
+#group_col <- c("No service", "Limited service", "Basic service")
+```
+
+## Task 1: Countries with basic access to sanitation, hygiene and water supply services in schools
+
+### Sanitation Coverage
+
+This section looks at countries in Sub-Saharan Africa with high sanitation coverage in schools. The period used as the year 2021. The threshold was based on countries with at least 70% covearge for basic services.
+
+In @tbl-sanitation-coverage-2021 , we could see that only 6 countries has sanitation coverage over 70%. Among these countries, Mauritius and Seychelles both have 100% coverage followed by Cape Verde with about 93%. Uganda and Sao Tome and Principe have almost same covergae approximately 75%.
+
+```{r }
+#| label: tbl-sanitation-coverage-2021 
+#| tbl-cap: "Countries in Sub-Saharan Africa with high sanitation coverage (>70%) in schools (national level)"
+
+Sanitation_coverage_70 <- capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(percent_coverage >= 70,
+         service_level == "Basic service",
+         residence_school_level %in% c("National level"),
+         service_types %in% c("Sanitation"),
+         #country == c("Ghana" ),
+         year %in% c(2021)
+         ) |> 
+  arrange(desc(percent_coverage)) |> 
+  distinct()
+
+# table
+Sanitation_coverage_70 |> 
+  gt() |> 
+  cols_hide(columns = c("iso3",	"SDGregion",	"year",	
+                        "service_level",	"service_types", 
+                        "residence_school_level")) |> 
+  fmt_number(columns = everything(), decimals = 0) |> 
+  cols_label(total_population ~ "Students population",
+             percent_coverage ~ "Basic service coverage (%)",
+             country ~ "Country") |> 
+  tab_style(style = list(
+    cell_text(weight = "bold"),
+    cell_borders(sides = c("top", "bottom"), weight = px(1.5),style = "solid"),
+    cell_fill("lightgray")
+    ),
+    locations = cells_column_labels()) |> 
+  cols_align(align = "center", columns = c(5,6))
+  
+
+```
+
+### Hygiene Coverage
+
+Under this service delivery, 5 countries have over 70% coverage led by Seychelles with 100%. Djibouti is second with 94% followed by Mauritius with 93%. Cape Verde is 4th with 86% and Guinnea Bissau is 5th with 76%.
+
+It could be seen that some countries are doing well in both the provision of sanitation and hygiene services whiles other countries are doing well in only one at a time. Cape Verde, Seychelles and Mauritius appeared in the top 5 for both hygiene and sanitation services.
+
+The results can be seen in @tbl-hygiene-coverage-2021.
+
+```{r}
+#| label: tbl-hygiene-coverage-2021 
+#| tbl-cap: "Countries in Sub-Saharan Africa with high hygiene coverage (>70%) in schools (national level)"
+
+Hygiene_coverage_70 <- capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(percent_coverage >= 70,
+         service_level == "Basic service",
+         residence_school_level %in% c("National level"),
+         service_types %in% c("Hygiene"),
+         year %in% c(2021)
+         ) |> 
+  arrange(desc(percent_coverage)) |> 
+  distinct()
+
+# table
+Hygiene_coverage_70 |> 
+  gt() |> 
+  cols_hide(c(1:2,4,7,8,9))|> 
+  fmt_number(columns = everything(), decimals = 0) |> 
+  cols_label(total_population ~ "Students population",
+             percent_coverage ~ "Basic service coverage (%)",
+             country ~ "Country") |> 
+  tab_style(style = list(
+    cell_text(weight = "bold"),
+    cell_borders(sides = c("top", "bottom"), weight = px(1.5),style = "solid"),
+    cell_fill("lightgray")
+    ),
+    locations = cells_column_labels())|> 
+  cols_align(align = "center", columns = c(5,6))
+
+```
+
+### Water supply coverage
+
+For basic access to water supply in schools, there are 7 countries with over 70% coverage of the school age population. Seychelles and Mauritius both have 100% coverage. Their high access rate could be due to the lesser population in these two countries (Mauritius=232, Seychelles=23).
+
+Zambia has 79% coverage while Ghana and Malawi are approximately 78%. The 7th is Mali with about 70% coverage. Graphical presentation is showed in @tbl-water-coverage-2021.
+
+```{r}
+#| label: tbl-water-coverage-2021 
+#| tbl-cap: "Countries in Sub-Saharan Africa with high water supply coverage (>70%) in schools (national level)"
+
+Water_coverage_70 <- capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(percent_coverage >= 70,
+         service_level == "Basic service",
+         residence_school_level %in% c("National level"),
+         service_types %in% c("Water supply"),
+         year %in% c(2021)
+         ) |> 
+  arrange(desc(percent_coverage)) |> 
+  distinct()
+
+# table
+Water_coverage_70 |> 
+  gt() |> 
+  cols_hide(c(1:2,4,7,8,9))|> 
+  fmt_number(columns = everything(), decimals = 0) |> 
+  cols_label(total_population ~ "Students population",
+             percent_coverage ~ "Basic service coverage (%)",
+             country ~ "Country") |> 
+  tab_style(style = list(
+    cell_text(weight = "bold"),
+    cell_borders(sides = c("top", "bottom"), weight = px(1.5),style = "solid"),
+    cell_fill("lightgray")
+    ),
+    locations = cells_column_labels())|> 
+  cols_align(align = "center", columns = c(5,6))
+```
+
+## Task 2: Countries with no basic access to sanitation, hygiene and water supply services in schools
+
+This section looks at countries in Sub-Saharan Africa with little or no WASH coverage in schools. The threshold was based on countries with more than 40% of the students population lacking access to any of the WASH services.
+
+### Sanitation Coverage
+
+In @tbl-sanitation-low-2021, we could see that 6 countries has more than 40% of the student population with no access to sanitation services. Among these countries, Niger is on top with 63%, follwed by Mauritania with 60% and Guinea-Bissau which is the least on the list with 40% of student population with no access to sanitation services.
+
+```{r }
+#| label: tbl-sanitation-low-2021 
+#| tbl-cap: Countries in Sub-Saharan Africa with no sanitation access (>40%) in schools (national level)
+ 
+Sanitation_coverage_30 <- capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(percent_coverage >= 40,
+         service_level == "No service",
+         residence_school_level %in% c("National level"),
+         service_types %in% c("Sanitation"),
+         #country == c("Ghana" ),
+         year %in% c(2021)
+         ) |> 
+  arrange(desc(percent_coverage)) |> 
+  distinct()
+
+#table
+Sanitation_coverage_30 |> 
+  gt() |> 
+  cols_hide(c(1:2,4,7,8,9))|> 
+  fmt_number(columns = everything(), decimals = 0) |> 
+  cols_label(total_population ~ "Students population",
+             percent_coverage ~ "No service coverage (%)",
+             country ~ "Country") |> 
+  tab_style(style = list(
+    cell_text(weight = "bold"),
+    cell_borders(sides = c("top", "bottom"), weight = px(1.5),style = "solid"),
+    cell_fill("lightgray")
+    ),
+    locations = cells_column_labels()) |> 
+  cols_align(align = "center", columns = c(5,6))
+    
+
+
+```
+
+### Hygiene Coverage
+
+@tbl-hygiene-low-2021 shows the list of the leading countries in Sub-Saharan Africa with over 40% of student population having no access to hygiene services. This list is topped by South Sudan and Ethiopia each with 80% of the student population without access to hygiene services. the list make a total of 10 with Uganda being the least on the list with 46% of the student population with no access.
+
+```{r}
+#| label: tbl-hygiene-low-2021 
+#| tbl-cap: Countries in Sub-Saharan Africa with no hygiene access (>40%) in schools (national level)
+
+
+Hygiene_coverage_30 <- capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(percent_coverage >= 40,
+         service_level == "No service",
+         residence_school_level %in% c("National level"),
+         service_types %in% c("Hygiene"),
+         year %in% c(2021)
+         ) |> 
+  arrange(desc(percent_coverage)) |> 
+  distinct() 
+
+
+#table
+Hygiene_coverage_30 |> 
+  gt() |> 
+  cols_hide(c(1:2,4,7,8,9))|> 
+  fmt_number(columns = everything(), decimals = 0) |> 
+  cols_label(total_population ~ "Students population",
+             percent_coverage ~ "No service coverage (%)",
+             country ~ "Country") |> 
+  tab_style(style = list(
+    cell_text(weight = "bold"),
+    cell_borders(sides = c("top", "bottom"), weight = px(1.5),style = "solid"),
+    cell_fill("lightgray")
+    ),
+    locations = cells_column_labels()) |> 
+  cols_align(align = "center", columns = c(5,6))
+
+```
+
+### Water Supply coverage
+
+Schools in 14 countries in Sub-Saharan Africa has no access to water supply and this is very alarming. Nine of these schools has more than 50% of the student population without access to water supply with Niger on top of this list with about 83% of the student population lacking access to water supply. This can be seen in @tbl-water-low-2021.
+
+```{r}
+#| label: tbl-water-low-2021 
+#| tbl-cap: Countries in Sub-Saharan Africa with no water supply services (>40%) in schools (national level)
+
+Water_coverage_30 <- capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(percent_coverage >= 40,
+         service_level == "No service",
+         residence_school_level %in% c("National level"),
+         service_types %in% c("Water supply"),
+         year %in% c(2021)
+         ) |> 
+  arrange(desc(percent_coverage)) |> 
+  distinct()
+
+#table
+Water_coverage_30 |> 
+  gt() |> 
+  cols_hide(c(1:2,4,7,8,9))|> 
+  fmt_number(columns = everything(), decimals = 0) |> 
+  cols_label(total_population ~ "Students population",
+             percent_coverage ~ "No service coverage (%)",
+             country ~ "Country") |> 
+  tab_style(style = list(
+    cell_text(weight = "bold"),
+    cell_borders(sides = c("top", "bottom"), weight = px(1.5),style = "solid"),
+    cell_fill("lightgray")
+    ),
+    locations = cells_column_labels()) |> 
+  cols_align(align = "center", columns = c(5,6))
+
+```
+
+## Task 3: Status of WASH coverage for various service levels
+
+This section examines the percentage share/coverage for the individual service levels for the top 5 countries identified in task 1. It also examines the progress made by these countries between 2019 and 2021.
+
+### Sanitation status
+
+Data for all countries remained same for the two-year period apart from Togo. From 2019 to 2021, Togo has made a significant improvement in access to basic service. The percentage coverage in 2019 was 44.8% which has increased to 79.4% in 2021 representing an increase of 34.6%. This feat is commendable and will go a long way to increase school attendance rate especially for young girls. Results are depicted in @fig-sanitation-coverage-2021.
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.618
+#| fig-cap: Percentage share of service levels for sanitation in selected countries
+#| label: fig-sanitation-coverage-2021
+
+
+capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(#percent_coverage >= 70,
+         country %in% c("Mauritius", "Seychelles","Cabo Verde", "Togo", "Sao Tome and Principe"),
+         residence_school_level %in% c("National level"),
+         service_types %in% c("Sanitation"),
+         year %in% c(2019,2021)
+         ) |> 
+  distinct() |> 
+  ggplot(mapping=aes(x = country ,
+                   y = percent_coverage,
+                   fill = service_level)) +
+  geom_col( width = 0.7) +
+  labs(y = "Coverage (%)",
+       x = "Countries",
+       fill = "Service levels") +
+  scale_fill_manual(values = sani_col) +
+  facet_wrap(~year) +
+  geom_text(aes(label = round(percent_coverage, 1)), 
+            position = position_stack(vjust = 0.8),
+            size = 3,
+            color = "black") +
+  theme(strip.text = element_text(size = 12),
+        panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.5),
+        axis.text.x = element_text(vjust = 0.5, angle = 65, size = 10))
+```
+
+### Hygiene status
+
+Results for the two years remains the same for all the countries (@fig-hygiene-coverage-2021). It is also worthy to note that Seychelles was already at 100% access to basic services in 2019 and did not need any improvement. It is also important to note that Cabo Verde, Djibouti and Mauritius had insufficient data in 2019 and same as in 2021. They neither made progress in the coverage nor made improvement in the data availability. Though their current coverage for basic service is commendable, more effort is required to ensure data is available to make informed decisisons that will promote hygiene access in schools and ensure conducive schooling environment for all.
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.618
+#| fig-cap: Percentage share of service levels for hygiene in selected countries
+#| label: fig-hygiene-coverage-2021
+
+
+capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(country %in% c("Seychelles","Djibouti","Mauritius","Cabo Verde","Guinea-Bissau"),
+         residence_school_level %in% c("National level"),
+         service_types %in% c("Hygiene"),
+         year %in% c(2019, 2021)
+         ) |> 
+  distinct() |> 
+  ggplot(mapping=aes(x = country,
+                   y = percent_coverage,
+                   fill = service_level)) +
+  geom_col(width = 0.7)+
+  labs(y = "Coverage (%)",
+       x = "Countires",
+       fill = "Service levels")+
+  scale_fill_manual(values = hyg_col) +
+  facet_wrap(~year)+
+  geom_text(aes(label = round(percent_coverage, 1)), 
+            position = position_stack(vjust = 0.8),
+            size = 3,
+            color = "black") +
+  theme(strip.text = element_text( size = 12),
+        panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.5),
+        axis.text.x = element_text(vjust = 0.5, angle = 65, size = 10))
+```
+
+### Water supply status
+
+No major improvement within the span of the two years for the countries with the exception of Ghana. Between 2019 and 2021, Ghana improved on the access to basic service by 2.7% while reducing the percentage of no access by 3.2% as shown in @fig-water-coverage-2021.
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.618
+#| fig-cap: Percentage share of service levels for water supply in selected countries
+#| label: fig-water-coverage-2021
+
+capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(country %in% c("Mauritius", "Seychelles","Zambia", "Ghana", "Mali"),
+         residence_school_level %in% c("National level"),
+         service_types %in% c("Water supply"),
+         year %in% c(2019,2021)
+         ) |> 
+  distinct() |> 
+  ggplot(mapping=aes(x = country,
+                   y = percent_coverage,
+                   fill = service_level)) +
+  geom_col(width = 0.7)+
+  labs(y = "Coverage (%)",
+       x = "Countries",
+       fill = "Service levels")+
+  scale_fill_manual(values = water_col) +
+  facet_wrap(~year)+
+  geom_text(aes(label = round(percent_coverage, 1)), 
+            position = position_stack(vjust = 0.8),
+            size = 3,
+            color = "black") +
+  theme(strip.text = element_text(size = 12),
+        panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.5),
+        axis.text.x = element_text(vjust = 0.5, angle = 0, size = 10))
+```
+
+## Task 4: WASH service delivery at the local level
+
+This exercise was based on some selected countries that has data at the local level. That is data for urban and rural residencies.
+
+### Sanitation
+
+Six countries in total were selected for this analysis. Among all the six countries, the coverage for basic sanitation service is higher for schools in urban areas than schools in rural areas with the exception of Mali. In @fig-sanitation-local-2021, it can be observed that Mali has high percentage coverage in rural areas than in urban areas. Likewise, the proportion of student population with limited access is higher in the rural areas than in urban areas except for Malawi where percentage coverage for limited acess is higher in urban areas than rural areas.
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.618
+#| fig-cap: Comparison of sanitation services delivery between rural and urban areas
+#| label: fig-sanitation-local-2021
+
+
+capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(residence_school_level %in% c("Urban residence", "Rural residence"),
+         service_types == "Sanitation",
+         year %in% c(2021),
+         country %in% c("Ghana","Mali", "Malawi","South Sudan", "Niger", "Nigeria")
+         ) |> 
+  distinct() |> 
+  ggplot(mapping=aes(x = residence_school_level,
+                   y = percent_coverage,
+                   fill = service_level)) +
+  geom_col( width = 0.7, position = position_dodge()) +
+  labs(y = "Coverage (%)",
+       x = "Location of schools",
+       fill = "Service levels") +
+  scale_fill_manual(values = sani_col) +
+  facet_wrap(~country) +
+  theme(strip.text = element_text(size = 12),
+        panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.5),
+        axis.text.x = element_text(vjust = 0.5, angle = 0, size = 10))
+ 
+```
+
+### Hygiene
+
+Results from the analysis indicates that access to basic hygiene services is on the high in urban areas than in rural areas for 4 out of the five countries considered (@fig-hygiene-local-2021). In Tanzania, schools in rural areas have high access to basic services thatn schools located in the urban areas. However, the difference is not large.
+
+Moreover, the rate of no services is higher in the rural areas than in the urban areas for all the countries analysed.
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.618
+#| fig-cap: Comparison of hygiene services delivery between rural and urban areas
+#| label: fig-hygiene-local-2021
+
+
+capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(residence_school_level %in% c("Urban residence", "Rural residence"),
+         service_types == "Hygiene",
+         year %in% c(2021),
+         country %in% c("Ghana","Mali", "Gabon", "United Republic of Tanzania", "Nigeria")
+         ) |> 
+  distinct() |> 
+  ggplot(mapping=aes(x = residence_school_level,
+                   y = percent_coverage,
+                   fill = service_level)) +
+  geom_col( width = 0.7, position = position_dodge()) +
+  labs(y = "Coverage (%)",
+       x = "Location of schools",
+       fill = "Service levels") +
+  scale_fill_manual(values = hyg_col) +
+  facet_wrap(~country) +
+ theme(strip.text = element_text(size = 12),
+       panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.5),
+       axis.text.x = element_text(vjust = 0.5, angle = 0, size = 10))
+
+```
+
+### Water supply
+
+Access to basic services is higher in schools that are located in urban areas than schools in the rural areas for all the six countries analysed. Likewise, it could be seen that schools in rural areas have high records of no services as well as limited service. However, there is an exception for Nigeria and Tanzania, where the percentage of students with limited access in the urban area is higher than in the rural areas (@fig-water-local-2021).
+
+The results confirms the assertin that rural communities are always left behind in the provision of social amenities of which WASH services is essential. Lack of access to WASH services for students in the rural communities put the students at risk of contracting and spreading wash-related diseases which will affect their health and education. Thus, it is important to invest and pay attention to the rural communities to ensure that they have access to basic WASH services as their human rights.
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.618
+#| fig-cap: Comparison of sanitation services delivery between rural and urban areas
+#| label: fig-water-local-2021
+
+
+capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(residence_school_level %in% c("Urban residence", "Rural residence"),
+         service_types == "Water supply",
+         year %in% c(2021),
+         country %in% c("Ghana","Mali", "Gabon", "United Republic of Tanzania", "Nigeria", "South Sudan")
+         ) |> 
+  distinct() |> 
+  ggplot(mapping=aes(x = residence_school_level,
+                   y = percent_coverage,
+                   fill = service_level)) +
+  geom_col( width = 0.7, position = position_dodge()) +
+  labs(y = "Coverage (%)",
+       x = "Location of schools",
+       fill = "Service levels") +
+  scale_fill_manual(values = water_col) +
+  facet_wrap(~country) +
+  theme(strip.text = element_text(colour = "black", size = 12),
+        panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.5),
+        axis.text.x = element_text(vjust = 0.5, angle = 0, size = 10))
+```
+
+## Task 5: Status WASH service delivery at the school level
