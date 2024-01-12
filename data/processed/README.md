@@ -8,23 +8,15 @@
 
 **Author A**
 
-- First name:
-- Surname:
-- ORCID iD
-- Email:
+- First name: Jonathan Opoku
+- Surname: Oti
+- ORCID iD: 0000-0001-5378-146X
+- Email:jopoku.oti@gmail.com
 
-**Author B**
-
-- First name:
-- Surname:
-- ORCID iD
-- Email:
-
-etc.
 
 3.  Date of data collection (single date, range, approximate date):
 
-4.  Geographic location of data collection:
+4.  Geographic location of data collection: Global
 
 5.  Information about funding sources that supported the collection of
     the data: 
