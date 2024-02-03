@@ -1,49 +1,84 @@
 ---
-title: "STATUS OF WASH SERVICE DELIVERY IN SCHOOLS IN SUB-SAHARAN ASFRICA"
-author: Jonathan Opoku Oti
+title: "Status of WASH Services in Sub-Saharan African Schools"
+author: 
+  - name: Jonathan Opoku Oti
+    orcid: 0000-0001-5378-146X
+    email: jopoku.oti@gmail.com
+    affiliation: 
+    - name: IST CERIS, Portugal
+      url: 
+date: today
+abstract: 
+  Access to water, sanitatoin and hygiene services is vital in the socio-economic development of every nation. Particularly in schools, it is essential in ensuring that students has conducive environment and sound mind to focus on studies. However, much attention has not been given to WASH services especially in schools. This report thus utilize the data from JMP 2022 report to analyse the WASH delivery status in schools within Sub-Saharan Africa. Access to basic WASH services is high in schools located in the urban areas than in the rural areas. Most countries have limited data at both national and local levels and it poses a threat to ensuring equity and equal access to WASH services in schools. Only Ghana and United Republic of Tanzania has complete records of WASH data for all residence types and at all school levels. Authorities are encouraged to put in much effort towards data collection and provision of WASH services in schools with special attention to rural comunities. 
 format: 
   html:
     toc: true
     number-sections: true
     theme: materia
+    code-fold: true
+    code-summary: "show the code"
+execute:
+  warning: false
+license: "CC BY"
 editor: visual
+bibliography: references.bib
 ---
 
-# Project description
+------------------------------------------------------------------------
 
-This project is intended to analyse the wash coverage in schools in Sub-Sahara Africa based on the following questions:
+# Introduction
 
--   What are the top countries with basic access to sanitation, hygiene and water supply services in schools?
+Access to Water, Sanitation, and Hygiene (WASH) services is a fundamental aspect of ensuring a healthy and conducive learning environment in schools. However, some countries in Sub-Saharan Africa, faces unique challenges in providing adequate WASH coverage in educational institutions, contributing to disparities in the quality of education and the overall well-being of students. These challenges represent significant impediments to the achievement of the ambitions of the 2030 Agenda, not least the commitment to leave no-one behind. Recognizing the critical importance of addressing these issues, this project seeks to:
 
--   What are the top countries with low access to basic sanitation, hygiene and water supply services in schools?
+-   Understand the current state of WASH services in schools within the region.
 
--   What is the percentage coverage of hygiene services in schools per country?
+-   Assess the relationship between WASH service delivery and the residency type of schools (urban or rural settings) and whether the location of the schools have any influence on the level of access to sanitation delivery.
 
--   What is the percentage coverage of sanitation services in schools per country?
+-   Assess WASH service availability across different school levels to identify which school level is WASH services lacking or improving?
 
--   What is the percentage coverage of water supply in per country schools?
+The results from this study will provide vital information that can inform targeted policy recommendations to bridge the existing gaps to promote socio-economic development.
 
--   What is the relationship between the service delivery and the residency type: i.e. Does the location of the school (e.g. urban/rural) has any influence on the level of access to sanitation delivery?
+# Data and Methodology
 
--   At what school level is wash services lacking or improving? Compare between countries
+## Data
+
+The data used in this project was obtained from the WHO/UNICEF JMP WASH Monitoring dataset. Larger part of the data is from the jmpwashdata R package [@jmpwashdata] while another portion was downloaded from the [JMP Website](https://washdata.org/data/downloads#WLD).
+
+## Methodology
+
+This report employed descriptive approach to assess the level of WASH access in schools in Sub-Saharan Africa. The analysis is categorized into five main tasks where each task is dedicated to answering a particular objective. The tasks are as follows:
+
+-   Task 1: This deals with countries with basic access to sanitation, hygiene and water supply services in schools
+
+-   Task 2:
+
+-   Task 3:
+
+-   Task 4:
+
+-   Task 5:
+
+The tidyverse [@tidyverse] and gt packages were used in this report [@gt].
 
 # Analysis and Discussion
 
 ```{r}
-
-library(tidyverse)
+#| label: load-packages
+ 
+library(tidyverse) 
 library(gt)
 ```
 
 ```{r }
+#| label: ipmort data
 
 capstone_data <- read_csv(here::here("data/processed/final_capstone_data.csv"))
 
 ```
 
 ```{r }
+#| label: define levels and colours
 
-#define levels and colours
 levels_service_lvl <- c("No service", "Limited service", "Basic service")
 
 capstone_data_lvl <- capstone_data |> 
@@ -58,7 +93,7 @@ hyg_col <- c("No service" = "#FEBC11","Limited service" = "#fff176", "Basic serv
 #group_col <- c("No service", "Limited service", "Basic service")
 ```
 
-## Task 1: Countries with basic access to sanitation, hygiene and water supply services in schools
+## Countries with basic access to sanitation, hygiene and water supply services in schools
 
 ### Sanitation Coverage
 
@@ -182,7 +217,7 @@ Water_coverage_70 |>
   cols_align(align = "center", columns = c(5,6))
 ```
 
-## Task 2: Countries with no basic access to sanitation, hygiene and water supply services in schools
+## Countries with no basic access to sanitation, hygiene and water supply services in schools
 
 This section looks at countries in Sub-Saharan Africa with little or no WASH coverage in schools. The threshold was based on countries with more than 40% of the students population lacking access to any of the WASH services.
 
@@ -302,7 +337,7 @@ Water_coverage_30 |>
 
 ```
 
-## Task 3: Status of WASH coverage for various service levels
+## Status of WASH coverage for various service levels
 
 This section examines the percentage share/coverage for the individual service levels for the top 5 countries identified in task 1. It also examines the progress made by these countries between 2019 and 2021.
 
@@ -417,13 +452,13 @@ capstone_data_lvl |>
         axis.text.x = element_text(vjust = 0.5, angle = 0, size = 10))
 ```
 
-## Task 4: WASH service delivery at the local level
+## WASH service delivery at the local level
 
 This exercise was based on some selected countries that has data at the local level. That is data for urban and rural residencies.
 
 ### Sanitation
 
-Six countries in total were selected for this analysis. Among all the six countries, the coverage for basic sanitation service is higher for schools in urban areas than schools in rural areas with the exception of Mali. In @fig-sanitation-local-2021, it can be observed that Mali has high percentage coverage in rural areas than in urban areas. Likewise, the proportion of student population with limited access is higher in the rural areas than in urban areas except for Malawi where percentage coverage for limited access is higher in urban areas than rural areas.
+In total, there were seven countries with available data at the rural and urban levels (Ghana, Mali, Malawi, South Sudan, Niger, Nigeria, United Republic of Tanzania). Out of which 6 were selected for this analysis. Among all the six countries, the coverage for basic sanitation service is higher for schools in urban areas than schools in rural areas with the exception of Mali. In @fig-sanitation-local-2021, it can be observed that Mali has high percentage coverage in rural areas than in urban areas. Likewise, the proportion of student population with limited access is higher in the rural areas than in urban areas except for Malawi where percentage coverage for limited access is higher in urban areas than rural areas.
 
 ```{r}
 #| fig-width: 10
@@ -457,7 +492,7 @@ capstone_data_lvl |>
 
 ### Hygiene
 
-Results from the analysis indicates that access to basic hygiene services is on the high in urban areas than in rural areas for 4 out of the five countries considered (@fig-hygiene-local-2021). In Tanzania, schools in rural areas have high access to basic services thatn schools located in the urban areas. However, the difference is not large.
+Only five countries had available hygiene data at the rural and urban levels and were used for the analysis. Results from the analysis indicates that access to basic hygiene services is on the high in urban areas than in rural areas for 4 out of the five countries considered (@fig-hygiene-local-2021). In Tanzania, schools in rural areas have high access to basic services than schools located in the urban areas. However, the difference is not large.
 
 Moreover, the rate of no services is higher in the rural areas than in the urban areas for all the countries analysed.
 
@@ -493,9 +528,13 @@ capstone_data_lvl |>
 
 ### Water supply
 
-Access to basic services is higher in schools that are located in urban areas than schools in the rural areas for all the six countries analysed. Likewise, it could be seen that schools in rural areas have high records of no services as well as limited service. However, there is an exception for Nigeria and Tanzania, where the percentage of students with limited access in the urban area is higher than in the rural areas (@fig-water-local-2021).
+Access to basic services is higher in schools that are located in urban areas than schools in the rural areas for all the six countries analysed. Analysis was based on all the countries with available data (6) at the rural and urban levels.
 
-The results confirms the assertion that rural communities are always left behind in the provision of social amenities of which WASH services is essential. Lack of access to WASH services for students in the rural communities put the students at risk of contracting and spreading wash-related diseases which will affect their health and education. Thus, it is important to invest and pay attention to the rural communities to ensure that they have access to basic WASH services as their human rights.
+Likewise, it could be seen that schools in rural areas have high records of no services as well as limited service. However, there is an exception for Nigeria and Tanzania, where the percentage of students with limited access in the urban area is higher than in the rural areas (@fig-water-local-2021).
+
+The results confirms the assertion that rural communities are always left behind in the provision of social amenities [@breese1978; @hewlett1977] of which WASH services is essential. Lack of access to WASH services in the rural communities put the students at risk of contracting and spreading wash-related diseases which will affect their health and education.
+
+It is particularly concerning that the opportunities for children and young people residing in rural areas are frequently hindered in comparison to their urban counterparts. They face a higher likelihood of being dropped out of school [@educatio2015] due to lack of access to WASH services especially the girl child. Thus, it is important to invest and pay attention to the rural communities to ensure that they have access to basic WASH services as their human rights.
 
 ```{r}
 #| fig-width: 10
@@ -526,8 +565,140 @@ capstone_data_lvl |>
         axis.text.x = element_text(vjust = 0.5, angle = 0, size = 10))
 ```
 
-## Task 5: Status WASH service delivery at the school level
+## Status of WASH service delivery at the school level
+
+Most of the countries do not have data at this level. Thus, in selection the countries for this analysis, the following conditions was applied:
+
+-   The country must have a data for ***basic service*** for at least two school levels and
+
+-   Data for ***no service*** for all school levels
+
+A total of 5 countries met this criteria and was included in the analysis.
+
+### Sanitation
+
+Coverage for basic sanitation service is observed to be high in the secondary schools for Ghana, Rwanda, Senegal and United Republic of Tanzania. In Sierra Leone, primary schools have high coverage for basic service @fig-sanitation-school-2021.
+
+Comparing the the rate of no service delivery, Rwanda, Senegal and United Republic of Tanzania observed high coverage in the pre-primary schools while Ghana and Sierrea Leone have higherpercentages in the primary schools.
+
+Generally, Ghana is doing very well with at least 60% basic service coverage at all school levels.
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.618
+#| fig-cap: Coverage of sanitation services delivery at different school levels in 2021
+#| label: fig-sanitation-school-2021
+
+
+capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(residence_school_level %in% c("Pre-primary", "Primary", "Secondary"),
+         service_types == "Sanitation",
+         year %in% c(2021),
+         country %in% c("Ghana","United Republic of Tanzania","Sierra Leone", "Senegal", "Rwanda")
+         ) |> 
+  distinct() |> 
+  ggplot(mapping=aes(x = residence_school_level,
+                   y = percent_coverage,
+                   fill = service_level)) +
+  geom_col( width = 0.7, position = position_dodge()) +
+  labs(y = "Coverage (%)",
+       x = "School level",
+       fill = "Service levels") +
+  scale_fill_manual(values = sani_col) +
+  facet_wrap(~country) +
+  theme(strip.text = element_text(size = 12),
+        panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.5),
+        axis.text.x = element_text(vjust = 0.5, angle = 0, size = 10))
+
+```
+
+### Hygiene
+
+Burundi, Ghana, and Gabon all have high coverage of basic hygiene services in the pre-primary schools while Rwanda and United Republic of Tanzania observed high coverage in the primary and secondary schools respectively. Similarly, the rate of no hygiene services is high in primary schools for Burundi, Ghana, and Gabon and high in pre-primary for Rwanda and United Republic of Tanzania respectively @fig-hygiene-school-2021.
+
+United Republic of Tanzania has the least basic serivce coverage of less than 20% for all school levels followed by Burundi with less than 20% for primary and secondary schools. Thus, these countries needs to put in more effort to ensure that school children have access to hygiene facilities in order to promote their health.
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.618
+#| fig-cap: Coverage of hygiene services delivery at different school levels in 2021
+#| label: fig-hygiene-school-2021
+
+
+capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(residence_school_level %in% c("Pre-primary", "Primary", "Secondary"),
+         service_types == "Hygiene",
+         year %in% c(2021),
+         country %in% c("Ghana","Burundi", "Gabon", "United Republic of Tanzania", "Rwanda")
+         ) |> 
+  distinct() |> 
+  ggplot(mapping=aes(x = residence_school_level,
+                   y = percent_coverage,
+                   fill = service_level)) +
+  geom_col( width = 0.7, position = position_dodge()) +
+  labs(y = "Coverage (%)",
+       x = "School level",
+       fill = "Service levels") +
+  scale_fill_manual(values = hyg_col) +
+  facet_wrap(~country) +
+ theme(strip.text = element_text(size = 12),
+       panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.5),
+       axis.text.x = element_text(vjust = 0.5, angle = 0, size = 10))
+```
+
+### Water supply
+
+@fig-water-school-2021 shows the access to water supply at different school levels for 5 countries with available data. Ghana, Burundi and United Republic of Tanzania have high basic service coverage in secondary schools while for Burkina Faso and Gabon, primary schools have high basic service coverage.
+
+```{r}
+#| fig-width: 10
+#| fig-asp: 0.618
+#| fig-cap: Coverage of water supply services delivery at different school levels
+#| label: fig-water-school-2021
+
+capstone_data_lvl |> 
+  select(1:9) |> 
+  filter(residence_school_level %in% c("Pre-primary", "Primary", "Secondary"),
+         service_types == "Water supply",
+         year %in% c(2021),
+         country %in% c("Ghana","Burundi", "Gabon", "United Republic of Tanzania", "Burkina Faso")
+         ) |> 
+  distinct() |> 
+  ggplot(mapping=aes(x = residence_school_level,
+                   y = percent_coverage,
+                   fill = service_level)) +
+  geom_col( width = 0.7, position = position_dodge()) +
+  labs(y = "Coverage (%)",
+       x = "School level",
+       fill = "Service levels") +
+  scale_fill_manual(values = water_col) +
+  facet_wrap(~country) +
+  theme(strip.text = element_text(colour = "black", size = 12),
+        panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.5),
+        axis.text.x = element_text(vjust = 0.5, angle = 0, size = 10))
+
+```
 
 # Conclusion
 
-# References
+This study analysed the level of WASH access and data availability in schools in Sub-Saharan countries. the Few countries
+
+Access to various wash services varies in various countries likely due to several factors that are not considered in this study.
+
+Generally, access to water supply needs more improvement with 14 countries having over 40% of their students population without access to water supply. Only 7 countries have schools with over 70% basic service coverage in water supply.
+
+Ten countries have over 40% of the school.age population with no access to hygiene services while 5 countries have basic services coverage over 70%.
+
+Countries are performing well with access to sanitation services in schools. Only six countries have over 40% of their school-age population with no access to sanitation services. Similarly, six countries have a coverage of basic access over 70%.
+
+Schools located in rural communities have high rate of limited or no access to water, sanitation and hygiene services delivery.
+
+Access to wash services at school levels varies across countries. Secondary schools in most cases have high coverage of basic services in water supply and sanitation while access to basic hygiene services is high in pre-primary schools.
+
+Ghana and United Republic of Tanzania has the best records of WASH data for all residence types and at all school levels.
+
+Data availability at the local level is very important for informing policy and decision making and thus authorities in Sub-Saharan countries must prioritize it. Additionally, More efforts are required to ensure equity and equal access to water, sanitation and hygiene services in schools.
+
+# Reference
