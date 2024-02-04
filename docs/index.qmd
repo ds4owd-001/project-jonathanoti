@@ -685,20 +685,20 @@ capstone_data_lvl |>
 
 This study analysed the level of WASH access and data availability in schools in Sub-Saharan countries.
 
-Access to various wash services varies in various countries likely due to several factors that are not considered in this study.
+-   Access to various wash services varies in various countries likely due to several factors that are not considered in this study.
 
-Generally, access to water supply needs more improvement with 14 countries having over 40% of their students population without access to water supply. Only 7 countries have schools with over 70% basic service coverage in water supply.
+-   Generally, access to water supply needs more improvement with 14 countries having over 40% of their students population without access to water supply. Only 7 countries have schools with over 70% basic service coverage in water supply.
 
-Ten countries have over 40% of the school.age population with no access to hygiene services while 5 countries have basic services coverage over 70%.
+-   Ten countries have over 40% of the school.age population with no access to hygiene services while 5 countries have basic services coverage over 70%.
 
-Countries are performing well with access to sanitation services in schools. Only six countries have over 40% of their school-age population with no access to sanitation services. Similarly, six countries have a coverage of basic access over 70%.
+-   Countries are performing well with access to sanitation services in schools. Only six countries have over 40% of their school-age population with no access to sanitation services. Similarly, six countries have a coverage of basic access over 70%.
 
-Schools located in rural communities have high rate of limited or no access to water, sanitation and hygiene services delivery.
+-   Schools located in rural communities have high rate of limited or no access to water, sanitation and hygiene services delivery.
 
-Access to wash services at school levels varies across countries. Secondary schools in most cases have high coverage of basic services in water supply and sanitation while access to basic hygiene services is high in pre-primary schools.
+-   Access to wash services at school levels varies across countries. Secondary schools in most cases have high coverage of basic services in water supply and sanitation while access to basic hygiene services is high in pre-primary schools.
 
-Ghana and United Republic of Tanzania has the best records of WASH data for all residence types and at all school levels.
+-   Ghana and United Republic of Tanzania has the best records of WASH data for all residence types and at all school levels.
 
-Data availability at the local level is very important for informing policy and decision making and thus authorities in Sub-Saharan countries must prioritize it. Additionally, More efforts are required to ensure equity and equal access to water, sanitation and hygiene services in schools.
+-   Data availability at the local level is very important for informing policy and decision making and thus authorities in Sub-Saharan countries must prioritize it. Additionally, More efforts are required to ensure equity and equal access to water, sanitation and hygiene services in schools.
 
 # Reference
