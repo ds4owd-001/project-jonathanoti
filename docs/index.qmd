@@ -617,7 +617,7 @@ capstone_data_lvl |>
 
 Burundi, Ghana, and Gabon all have high coverage of basic hygiene services in the pre-primary schools while Rwanda and United Republic of Tanzania observed high coverage in the primary and secondary schools respectively. Similarly, the rate of no hygiene services is high in primary schools for Burundi, Ghana, and Gabon and high in pre-primary for Rwanda and United Republic of Tanzania respectively @fig-hygiene-school-2021.
 
-United Republic of Tanzania has the least basic serivce coverage of less than 20% for all school levels followed by Burundi with less than 20% for primary and secondary schools. Thus, these countries needs to put in more effort to ensure that school children have access to hygiene facilities in order to promote their health.
+United Republic of Tanzania has the least basic service coverage of less than 20% for all school levels followed by Burundi with less than 20% for primary and secondary schools. Thus, these countries needs to put in more effort to ensure that school children have access to hygiene facilities in order to promote their health.
 
 ```{r}
 #| fig-width: 10
@@ -683,7 +683,7 @@ capstone_data_lvl |>
 
 # Conclusion
 
-This study analysed the level of WASH access and data availability in schools in Sub-Saharan countries. the Few countries
+This study analysed the level of WASH access and data availability in schools in Sub-Saharan countries.
 
 Access to various wash services varies in various countries likely due to several factors that are not considered in this study.
 
