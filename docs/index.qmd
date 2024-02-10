@@ -1,27 +1,42 @@
 ---
-title: "Status of WASH Services in Sub-Saharan African Schools"
+title: "Access to WASH Services in Schools in Sub-Saharan Africa"
 author: 
-  - name: Jonathan Opoku Oti
+  - name: Jonathan Oti
     orcid: 0000-0001-5378-146X
     email: jopoku.oti@gmail.com
     affiliation: 
-    - name: IST CERIS, Portugal
-      url: 
-date: today
+    - name: Water, Sanitation and Hygiene Youth Network, Ghana
+      url: https://thewashclubgh.wixsite.com/washclub
+date: February 13, 2024
 abstract: 
-  Access to water, sanitatoin and hygiene services is vital in the socio-economic development of every nation. Particularly in schools, it is essential in ensuring that students has conducive environment and sound mind to focus on studies. However, much attention has not been given to WASH services especially in schools. This report thus utilize the data from JMP 2022 report to analyse the WASH delivery status in schools within Sub-Saharan Africa. Access to basic WASH services is high in schools located in the urban areas than in the rural areas. Most countries have limited data at both national and local levels and it poses a threat to ensuring equity and equal access to WASH services in schools. Only Ghana and United Republic of Tanzania has complete records of WASH data for all residence types and at all school levels. Authorities are encouraged to put in much effort towards data collection and provision of WASH services in schools with special attention to rural comunities. 
-format: 
+  Access to water, sanitation, and hygiene (WASH) services plays a pivotal role in the socio-economic development of any nation. Particularly within educational institutions, ensuring access to these services is paramount for creating a conducive learning environment where students can focus on their studies with peace of mind. This report utilizes data from the JMP 2022 report to analyze the current status of WASH delivery in schools across Sub-Saharan Africa. The analysis reveals that access to basic WASH services is high in schools located in the urban areas than in the rural areas. in addition, most countries lack comprehensive data at both national and local levels, posing a significant challenge to ensuring equitable access to WASH services in schools. Notably, only Ghana and the United Republic of Tanzania have maintained complete records of WASH data across all residence types and school levels. It is imperative for authorities to prioritize efforts towards improving data collection mechanisms and the provision of WASH services in schools, with special attention directed towards marginalized rural communities. By doing so, we can take significant strides towards bridging the gap and ensuring that all students, regardless of their location, have access to the fundamental necessities for a healthy and productive learning environment.
+  
+format:
   html:
     toc: true
     number-sections: true
     theme: materia
     code-fold: true
     code-summary: "show the code"
+  pdf:
+    #documentclass: report
+    toc: true
+    number-sections: true
+    papersize: a4
+    geometry: left = 2.7cm, right = 2.7cm, top = 2cm, bottom=2cm, heightrounded
+format-links: [pdf]  
 execute:
   warning: false
+  echo: true
 license: "CC BY"
+citation:
+  type: "report"
+  #container-title:
+  url: https://ds4owd-001.github.io/project-jonathanoti/
 editor: visual
 bibliography: references.bib
+csl: apa.csl
+#keywords: "Water" "Sanitation" "Hygiene" "SDG6" "Schools" "Sub-Sahara Africa"
 ---
 
 ------------------------------------------------------------------------
@@ -46,19 +61,19 @@ The data used in this project was obtained from the WHO/UNICEF JMP WASH Monitori
 
 ## Methodology
 
-This report employed descriptive approach to assess the level of WASH access in schools in Sub-Saharan Africa. The analysis is categorized into five main tasks where each task is dedicated to answering a particular objective. The tasks are as follows:
+This report employed descriptive approach to assess the level of WASH access in schools in Sub-Saharan Africa. The analysis is categorized into five main tasks where each task is dedicated to answering a particular question. The tasks are as follows:
 
--   Task 1: This deals with countries with basic access to sanitation, hygiene and water supply services in schools
+-   Task 1: This deals with countries with basic access to sanitation, hygiene and water supply services in schools.
 
--   Task 2:
+-   Task 2: Deals with countries lacking basic access to sanitation, hygiene and water supply services in schools.
 
--   Task 3:
+-   Task 3: Examines the status of WASH coverage for various service levels (no service, limited service and basic service). Definition of service levels are described in the annex.
 
--   Task 4:
+-   Task 4: Examines WASH service delivery at the local level (schools in rural and urban areas).
 
--   Task 5:
+-   Task 5: Examines the status of WASH service delivery at the school level (pre-primary, primary and secondary).
 
-The tidyverse [@tidyverse] and gt packages were used in this report [@gt].
+The tidyverse [@tidyverse] and gt [@gt] packages were used in this report.
 
 # Analysis and Discussion
 
@@ -579,7 +594,7 @@ A total of 5 countries met this criteria and was included in the analysis.
 
 Coverage for basic sanitation service is observed to be high in the secondary schools for Ghana, Rwanda, Senegal and United Republic of Tanzania. In Sierra Leone, primary schools have high coverage for basic service @fig-sanitation-school-2021.
 
-Comparing the the rate of no service delivery, Rwanda, Senegal and United Republic of Tanzania observed high coverage in the pre-primary schools while Ghana and Sierrea Leone have higherpercentages in the primary schools.
+Comparing the the rate of no service delivery, Rwanda, Senegal and United Republic of Tanzania observed high coverage in the pre-primary schools while Ghana and Sierra Leone have higher percentages in the primary schools.
 
 Generally, Ghana is doing very well with at least 60% basic service coverage at all school levels.
 
@@ -689,7 +704,7 @@ This study analysed the level of WASH access and data availability in schools in
 
 -   Generally, access to water supply needs more improvement with 14 countries having over 40% of their students population without access to water supply. Only 7 countries have schools with over 70% basic service coverage in water supply.
 
--   Ten countries have over 40% of the school.age population with no access to hygiene services while 5 countries have basic services coverage over 70%.
+-   Ten countries have over 40% of the school-age population with no access to hygiene services while 5 countries have basic services coverage over 70%.
 
 -   Countries are performing well with access to sanitation services in schools. Only six countries have over 40% of their school-age population with no access to sanitation services. Similarly, six countries have a coverage of basic access over 70%.
 
@@ -701,4 +716,38 @@ This study analysed the level of WASH access and data availability in schools in
 
 -   Data availability at the local level is very important for informing policy and decision making and thus authorities in Sub-Saharan countries must prioritize it. Additionally, More efforts are required to ensure equity and equal access to water, sanitation and hygiene services in schools.
 
-# Reference
+# Annex
+
+**Definition of service levels**
+
+***Water supply***
+
+-   Basic: Drinking water from an improved source is available at the school
+
+-   Limited: There is an improved source (piped, protected well/spring, rainwater, packaged/delivered water), but water not available at time of survey
+
+-   No services: No water source or unimproved source (unprotected well/spring, surface water)
+
+***Note:** Improved drinking water sources are those that have the potential to deliver safe water by nature of their design and construction*
+
+***Sanitation***
+
+-   Basic: Improved facilities, which are single-sex and usable at the school
+
+-   Limited: There are improved facilities (flush/pour-flush toilets, pit latrine with slab, composting toilet), but not single-sex or not usable at time of survey
+
+-   No service: No toilets or latrines, or unimproved facilities (pit latrines without a slab or platform, hanging latrines, bucket latrines)
+
+***Note:** Improved sanitation facilities are those designed to hygienically separate excreta from human contact*
+
+***Hygiene***
+
+-   Basic: Handwashing facilities, which have water and soap available
+
+-   Limited: Handwashing facilities with water, but no soap
+
+-   No service: No handwashing facilities at the school or handwashing facilities with no water
+
+***Note:** Handwashing facilities may be fixed or mobile and include a sink with tap water, buckets with taps, tippy-taps, and jugs or basins designated for handwashing.*
+
+# References
