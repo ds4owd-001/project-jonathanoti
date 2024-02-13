@@ -469,7 +469,7 @@ capstone_data_lvl |>
 
 ## WASH service delivery at the local level
 
-This exercise was based on some selected countries that has data at the local level. That is data for urban and rural residencies.
+This exercise was based on some selected countries that has data at the local level. That is data for urban and rural residencies. The overview of data availability is shown in @tbl-data-availability-residence in the annex.
 
 ### Sanitation
 
@@ -582,13 +582,13 @@ capstone_data_lvl |>
 
 ## Status of WASH service delivery at the school level
 
-Most of the countries do not have data at this level. Thus, in selection the countries for this analysis, the following conditions was applied:
+Most of the countries do not have data at this level. Thus, in selecting the countries for this analysis, the following conditions were applied:
 
--   The country must have a data for ***basic service*** for at least two school levels and
+-   The country must have data for ***basic service*** for at least two school levels and
 
 -   Data for ***no service*** for all school levels
 
-A total of 5 countries met this criteria and was included in the analysis.
+A total of 5 countries met this criteria and were included in the analysis. See the overview in @tbl-data-availability-school_level in annex 5.2.
 
 ### Sanitation
 
@@ -718,7 +718,7 @@ This study analysed the level of WASH access and data availability in schools in
 
 # Annex
 
-**Definition of service levels**
+## **Definition of service levels**
 
 ***Water supply***
 
@@ -749,5 +749,66 @@ This study analysed the level of WASH access and data availability in schools in
 -   No service: No handwashing facilities at the school or handwashing facilities with no water
 
 ***Note:** Handwashing facilities may be fixed or mobile and include a sink with tap water, buckets with taps, tippy-taps, and jugs or basins designated for handwashing.*
+
+## Overview of data availability
+
+@tbl-data-availability-residence shows the countries that have complete data at the rural and urban settings for at least one WASH service delivery.
+
+@tbl-data-availability-school_level shows the top countries with complete data for all school levels (pre-primary, primary and secondary) for at least one WASH service delivery.
+
+```{r}
+#| label: tbl-data-availability-residence 
+#| tbl-cap: Top countries with data available at all local levels (rural and urban settings)
+
+
+# create table for countries with good data at the rural and urban settings
+data_residence_lvl <- tibble(
+  Country = c("Ghana", "United Republic of Tanzania", "Nigeria", "Mali", "Gabon", "Sudan", "Niger", "Malawi"),
+  Water_supply = c("Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "No", "No"),
+  Sanitation = c("Yes", "Yes", "Yes", "Yes","No", "Yes", "Yes", "Yes"),
+  Hygiene = c("Yes", "Yes", "Yes", "Yes","Yes","No", "No", "No"))
+
+  
+  
+# table
+data_residence_lvl |> 
+  gt() |> 
+  cols_label(Water_supply ~ "Water supply") |> 
+  tab_style(style = list(
+    cell_text(weight = "bold"),
+    cell_borders(sides = c("top", "bottom"), weight = px(1.5),style = "solid"),
+    cell_fill("lightgray")
+    ),
+    locations = cells_column_labels()) |> 
+  cols_align(align = "center", columns = c(2:4))
+```
+
+```{r}
+#| label: tbl-data-availability-school_level
+#| tbl-cap: Top countries with data available at all school levels
+
+
+# create table for countries with good data for school levels
+data_school_lvl <- tibble(
+  Country = c("Ghana", "United Republic of Tanzania", "Burundi", "Gabon", "Sierra Leonne"),
+  Water_supply = c("Yes", "Yes", "Yes", "Yes", "No"),
+  Sanitation = c("Yes", "Yes", "No", "No", "Yes"),
+  Hygiene = c("Yes", "Yes", "Yes", "Yes", "No"))
+  
+
+  
+# table
+data_school_lvl |> 
+  gt() |> 
+  cols_label(Water_supply ~ "Water supply") |> 
+  tab_style(style = list(
+    cell_text(weight = "bold"),
+    cell_borders(sides = c("top", "bottom"), weight = px(1.5),style = "solid"),
+    cell_fill("lightgray")
+    ),
+    locations = cells_column_labels()) |> 
+  cols_align(align = "center", columns = c(2:4))
+
+```
 
 # References
